@@ -52,6 +52,7 @@ public class User implements UserDetails {
         this.age = age;
         this.email = email;
         this.password = password;
+
     }
 
     public Collection<Role> getRoles() {
