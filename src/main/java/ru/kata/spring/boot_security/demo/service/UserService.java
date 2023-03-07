@@ -1,0 +1,23 @@
+package ru.kata.spring.boot_security.demo.service;
+
+
+
+import org.springframework.security.core.userdetails.UserDetailsService;
+import ru.kata.spring.boot_security.demo.models.User;
+
+import java.util.List;
+
+public interface UserService{
+    void add(User user);
+    List<User> listUsers();
+
+    User show(int id);
+
+    void update(int id, User updatedUser);
+
+    void delete(int id);
+
+
+
+    User findUsersByEmail(String username);
+}
