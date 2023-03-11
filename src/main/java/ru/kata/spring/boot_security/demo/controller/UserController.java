@@ -29,9 +29,9 @@ public class UserController {
     public String oneUserPage(Principal principal, Model model) {
         User user = userService.findUsersByEmail(principal.getName());
         model.addAttribute("usera", user);
-        List<Role> roles = (List<Role>) roleRepository.findAll();
-
-        model.addAttribute("allroles", roles);
+//        List<Role> roles = (List<Role>) roleRepository.findAll();
+//
+//        model.addAttribute("allroles", roles);
         return "user";
     }
 }

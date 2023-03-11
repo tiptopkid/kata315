@@ -2,24 +2,25 @@ package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dao.UserDAO;
+
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImp implements UserService, UserDetailsService {
 
-    @Autowired
-    private UserDAO userDAO;
-    //ПОпробовать сделать через autowired само поле
 
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
@@ -42,45 +43,51 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Transactional(readOnly = true)
     @Override
     public List<User> listUsers() {
-        return userDAO.listUsers();
+        return userRepository.findAll();
 
     }
 
     @Transactional(readOnly = true)
     @Override
     public User show(int id) {
-        return userDAO.show(id);
+        return userRepository.getById(id);
 
     }
 
     @Transactional
     @Override
-    public void update(int id, User updatedUser) {
+    public void update(User updatedUser) {
+
         updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-        userDAO.update(id, updatedUser);
+
+        userRepository.save(updatedUser);
 
     }
 
     @Transactional
     @Override
     public void delete(int id) {
-        userDAO.delete(id);
+
+        userRepository.deleteById(id);
     }
 
-    //ПОПРОБОВАТЬ ПРОСТО ВЕРНУТЬ ЮЗЕРА
+
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findUsersByEmail(username);
+        UserDetails user = findUsersByEmail(username);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-                user.getAuthorities());
+
+        return user;
     }
 
     @Override
     public User findUsersByEmail(String email) {
         return userRepository.findUsersByEmail(email);
     }
+
+
 }

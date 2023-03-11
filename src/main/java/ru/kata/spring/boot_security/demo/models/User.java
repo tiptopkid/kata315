@@ -1,13 +1,18 @@
 package ru.kata.spring.boot_security.demo.models;
 
 
-import org.hibernate.Hibernate;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -19,31 +24,49 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "firstname")
+
     private String firstName;
 
-    @Column(name = "lastname")
+
     private String lastname;
 
-    @Column(name = "age")
+
     private int age;
 
-    @Column(name = "email")
 
     private String email;
 
-    @Column(name = "password")
+
     private String password;
 
-    //    @ManyToMany(fetch = FetchType.EAGER)
+
+    @Fetch(FetchMode.JOIN)
     @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Collection<Role> roles;
+    private Set<Role> roles;
 
 
     public User() {
+    }
+
+//    public User(String firstName, String lastname, int age, String email, String password) {
+//        this.firstName = firstName;
+//        this.lastname = lastname;
+//        this.age = age;
+//        this.email = email;
+//        this.password = password;
+//
+//    }
+
+    public User(String firstName, String lastname, int age, String email, String password, Set<Role> roles) {
+        this.firstName = firstName;
+        this.lastname = lastname;
+        this.age = age;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
     }
 
     public User(String firstName, String lastname, int age, String email, String password) {
@@ -52,14 +75,13 @@ public class User implements UserDetails {
         this.age = age;
         this.email = email;
         this.password = password;
-
     }
 
-    public Collection<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
@@ -122,16 +144,18 @@ public class User implements UserDetails {
                 ", lastname='" + lastname + '\'' +
                 ", age=" + age +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
 
-
-        return roles.stream()
-                .map(r -> new SimpleGrantedAuthority(r.getName()))
-                .collect(Collectors.toList());
+//        return roles.stream()
+//                .map(r -> new SimpleGrantedAuthority(r.getName()))
+//                .collect(Collectors.toList());
     }
 
     @Override

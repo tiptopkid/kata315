@@ -7,8 +7,8 @@ import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 @Component
 public class DBinit {
     private final UserService userService;
@@ -21,23 +21,33 @@ public class DBinit {
 
     @PostConstruct
     private void dataBaseInit() {
-        List<Role> adminRole = new ArrayList<>();
+        Set<Role> adminRole = new HashSet<>();
         Role roleUser = new Role("ROLE_USER");
         Role roleAdmin = new Role("ROLE_ADMIN");
-        adminRole.add(roleUser);
+
         adminRole.add(roleAdmin);
-        List<Role> userRole = new ArrayList<>();
+        adminRole.add(roleUser);
+
+        Set<Role> userRole = new HashSet<>();
         userRole.add(roleUser);
-        roleService.saveRole(roleUser);
+        userRole.add(roleAdmin);
+
         roleService.saveRole(roleAdmin);
+        roleService.saveRole(roleUser);
 
-        User admin = new User("admin", "admin", 25, "admin", "admin");
-        User user = new User("user", "user", 27, "user", "user");
-        admin.setRoles(adminRole);
-        user.setRoles(userRole);
 
-        userService.add(admin);
+
+
+        User admin = new User("admin", "admin", 25, "admin", "admin", adminRole);
+        User user = new User("user", "user", 27, "user", "user", userRole);
+        User tester = new User("test", "test", 32, "test", "test");
+//        admin.setRoles(adminRole);
+//        user.setRoles(userRole);
+        tester.setRoles(adminRole);
+
+        userService.update(admin);
         userService.add(user);
+        userService.add(tester);
 
 
 
