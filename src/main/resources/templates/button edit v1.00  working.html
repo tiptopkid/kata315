@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+//КОНТРОЛЛЕР
+@PatchMapping(value = "/test2/{id}")
+public String updateUser(@ModelAttribute("user") User updatedUser, @PathVariable("id") int id) {
+User existingUser = userService.show(id);
+existingUser.setFirstName(updatedUser.getFirstName());
+existingUser.setEmail(updatedUser.getEmail());
+existingUser.setLastname(updatedUser.getLastname());
+existingUser.setAge(updatedUser.getAge());
+existingUser.setRoles(updatedUser.getRoles());
+userService.updateUser(existingUser);
+return "redirect:/admin/test2";
+}
+
+//USER SERVICE
+@Override
+@Transactional
+public void updateUser(User updatedUser) {
+String pass = updatedUser.getPassword();
+if (pass.isEmpty()) {
+updatedUser.setPassword(userRepository.findById(updatedUser.getId()).get().getPassword());
+} else {
+updatedUser.setPassword(passwordEncoder.encode(pass));
+}
+userRepository.save(updatedUser);
+}
+
+
+
+
+<td>
+
+
+  <!-- Кнопка, которая открывает модальное окно EDIT -->
+  <button type="button" class="btn btn-info" data-bs-toggle="modal"
+          data-bs-target="#modalEdit" style="color: white"
+          th:data-bs-target="${'#modalEdit'+user.id}">Edit
+  </button>
+
+  <!-- Модальное окно EDIT -->
+  <div class="modal fade" th:id="${'modalEdit'+user.id}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="formEdit" th:method="PATCH"
+              action="#"
+              th:action="@{/admin/test2/{id}(id=${user.id})}" th:object="${user}">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit user</h5>
+            <button type="button" class="btn-close"
+                    data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body text-center">
+            <div class="form-group required">
+              <div class="controls">
+                <p>
+                  <label for="idEditUser">
+                    <strong>ID</strong>
+                    <input class="form-control" th:type="number"
+                           th:name="id" id="idEditUser"
+                           th:value="${user.id}" readonly>
+                  </label>
+                </p>
+                <p>
+                  <label for="editName">
+                    <strong>First name</strong>
+                    <input class="form-control" th:type="text"
+                           th:name="firstName" id="editName"
+                           placeholder="Username"
+                           th:value="${user.firstName}" required
+                    >
+                  </label>
+                </p>
+                <p>
+                  <label for="editLastname">
+                    <strong>Lastname</strong>
+                    <input class="form-control" th:type="text"
+                           th:name="lastname" id="editLastname"
+                           placeholder="Username"
+                           th:value="${user.lastname}" required>
+                  </label>
+                </p>
+                <p>
+                  <label for="editAge">
+                    <strong>Age</strong>
+                    <input class="form-control" th:type="number"
+                           th:name="age" id="editAge"
+                           placeholder="Age"
+                           th:value="${user.age}" required>
+                  </label>
+                </p>
+                <p>
+                  <label for="editEmail">
+                    <strong>Email</strong>
+                    <input class="form-control" th:type="email"
+                           th:name="email" id="editEmail"
+                           placeholder="Email"
+                           th:value="${user.email}" required>
+                  </label>
+                </p>
+                <p>
+                  <label for="password">
+                    <strong>Password</strong>
+                    <input type="password" class="form-control"
+                           name="password" required minlength="3"
+                           maxlength="20">
+                  </label>
+                <p/>
+                <label class="container-fluid col-6"
+                       for="editUserRoles">
+                  <strong>Role</strong>
+                  <select id="editUserRoles" class="form-select"
+                          name="roles" multiple size="2">
+                    <option th:each="role: ${allRoles}"
+                            th:value="${role.getId()}">
+                      <th:block th:text="${role.toString()}">
+                      </th:block>
+                    </option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary">Edit</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+
+
+</td>
+
+
+
+
+
+
+</body>
+</html>

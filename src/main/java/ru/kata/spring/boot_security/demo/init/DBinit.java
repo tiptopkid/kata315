@@ -38,14 +38,14 @@ public class DBinit {
 
 
 
-        User admin = new User("admin", "admin", 25, "admin", "admin", adminRole);
-        User user = new User("user", "user", 27, "user", "user", userRole);
-        User tester = new User("test", "test", 32, "test", "test");
+        User admin = new User("admin", "admin", 25, "admin@mail.ru", "admin", adminRole);
+        User user = new User("user", "user", 27, "user@mail.ru", "user", userRole);
+        User tester = new User("test", "test", 32, "test@mail.ru", "test");
 //        admin.setRoles(adminRole);
 //        user.setRoles(userRole);
         tester.setRoles(adminRole);
 
-        userService.update(admin);
+        userService.add(admin);
         userService.add(user);
         userService.add(tester);
 

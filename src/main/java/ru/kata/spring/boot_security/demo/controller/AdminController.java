@@ -46,6 +46,22 @@ public class AdminController {
         return "test";
     }
 
+    @GetMapping("/test2")
+    public String userPage2(Principal principal, Model model) {
+
+        model.addAttribute("newUser", new User());
+        Set<Role> roles = new HashSet<>(roleRepository.findAll());
+        model.addAttribute("allRoles", roles);
+
+//        model.addAttribute("editUser", userService.show(id));
+
+        User user = userService.findUsersByEmail(principal.getName());
+        model.addAttribute("usera", user);
+
+        model.addAttribute("users", userService.listUsers());
+        return "test2";
+    }
+
 
 
     @GetMapping("/new")
@@ -74,8 +90,14 @@ public class AdminController {
 
     }
 
+    @PatchMapping(value = "/test2/{id}")
+    public String updateUser(@ModelAttribute("user") User updatedUser, @PathVariable("id") int id) {
+
+        userService.updateUser(updatedUser, id);
+        return "redirect:/admin/test2";
+    }
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") User user) {
+    public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {
 
 //user.setRoles(roles);
 
@@ -87,7 +109,7 @@ public class AdminController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
         userService.delete(id);
-        return "redirect:/admin";
+        return "redirect:/admin/test2";
     }
 
 

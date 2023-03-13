@@ -58,11 +58,30 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Override
     public void update(User updatedUser) {
 
-        updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-
+        updatedUser.setPassword(passwordEncoder.encode(show(updatedUser.getId()).getPassword()));
+//updatedUser.setPassword(passwordEncoder.encode("123"));
         userRepository.save(updatedUser);
 
     }
+//TODO
+    @Override
+    @Transactional
+    public void updateUser(User updatedUser, int id) {
+        User existingUser = show(id);
+
+        existingUser.setFirstName(updatedUser.getFirstName());
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setLastname(updatedUser.getLastname());
+        existingUser.setAge(updatedUser.getAge());
+        existingUser.setRoles(updatedUser.getRoles());
+
+        if (!updatedUser.getPassword().isEmpty()) {
+            existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
+
+        userRepository.save(existingUser);
+    }
+
 
     @Transactional
     @Override
