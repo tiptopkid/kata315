@@ -32,6 +32,9 @@ public class UserController {
 //        List<Role> roles = (List<Role>) roleRepository.findAll();
 //
 //        model.addAttribute("allroles", roles);
-        return "user";
+        return "userpage";
     }
+
+
+
 }
