@@ -2,6 +2,8 @@ package ru.kata.spring.boot_security.demo.models;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,8 +40,9 @@ public class User implements UserDetails {
 
 
     private String password;
-
-
+//    @JsonIgnoreProperties(ignoreUnknown=true)
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonManagedReference
     @Fetch(FetchMode.JOIN)
     @ManyToMany
     @JoinTable(name = "users_roles",

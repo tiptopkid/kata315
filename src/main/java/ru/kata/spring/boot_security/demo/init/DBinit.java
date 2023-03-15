@@ -30,7 +30,7 @@ public class DBinit {
 
         Set<Role> userRole = new HashSet<>();
         userRole.add(roleUser);
-        userRole.add(roleAdmin);
+//        userRole.add(roleAdmin);
 
         roleService.saveRole(roleAdmin);
         roleService.saveRole(roleUser);

@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,6 +39,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
+
     }
 
     @Transactional(readOnly = true)
@@ -50,6 +52,11 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Transactional(readOnly = true)
     @Override
     public User show(int id) {
+//        User result = userRepository.getById(id);
+//        Hibernate.initialize(result.getRoles());
+//        return result;
+
+
         return userRepository.getById(id);
 
     }
@@ -61,6 +68,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
         updatedUser.setPassword(passwordEncoder.encode(show(updatedUser.getId()).getPassword()));
 //updatedUser.setPassword(passwordEncoder.encode("123"));
         userRepository.save(updatedUser);
+
 
     }
 //TODO
