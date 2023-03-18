@@ -5,8 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.exception_handling.NoSuchUserException;
-import ru.kata.spring.boot_security.demo.exception_handling.UserIncorrectData;
+
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -18,13 +17,12 @@ import java.util.List;
 public class MyRESTController {
     @Autowired
     private UserService userService;
-    @Autowired
-    private RoleRepository roleRepository;
+
 
     @GetMapping("/users")
-    public List<User> showAllUsers() {
+    public ResponseEntity<List<User>> showAllUsers() {
         List<User> allUsers = userService.listUsers();
-        return allUsers;
+        return ResponseEntity.ok(allUsers);
 
     }
 
@@ -36,58 +34,37 @@ public class MyRESTController {
 
 
     @GetMapping("/users/{id}")
-    public User getUser(@PathVariable int id) {
+    public ResponseEntity<User> getUser(@PathVariable int id) {
         User user = userService.show(id);
 
-//        if (user == null) {
-//            throw new NoSuchUserException("There is no user with ID="
-//                    + id + " int Database");
-//        }
-        return user;
+
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/users")
-    public String addNewUser(@RequestBody User user) {
+    public ResponseEntity<HttpStatus> addNewUser(@RequestBody User user) {
         userService.add(user);
 //        return user;
-        return "redirect:/admin";
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
 
-    @PatchMapping("/users")
-    public void updateUser(@RequestBody User user) {
-        userService.add(user);
+    @PatchMapping("/users/{id}")
+    public ResponseEntity<HttpStatus> updateUser(@RequestBody User user, @PathVariable int id) {
+        userService.updateUser(user, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+
 
     }
 
 
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable int id) {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable int id) {
         userService.delete(id);
 //        return "User with ID=" + id + " was deleted";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
-
-
-
-
-
-    //ОБРАБОТКА ОШИБОК
-//    @ExceptionHandler
-//    public ResponseEntity<UserIncorrectData> handleException(NoSuchUserException exception) {
-//        UserIncorrectData data = new UserIncorrectData();
-//        data.setInfo(exception.getMessage());
-//
-//        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
-//    }
-
-//    @ExceptionHandler
-//    public ResponseEntity<UserIncorrectData> handleException(Exception exception) {
-//        UserIncorrectData data = new UserIncorrectData();
-//        data.setInfo(exception.getMessage());
-//
-//        return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
-//    }
 }

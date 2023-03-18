@@ -42,74 +42,6 @@
     </div>
 </header>
 
-
-<!--<script type="text/javascript">-->
-
-
-<!--    function showCurrUser() {-->
-<!--        $.get(`/api/auth/`, function (data) {-->
-
-<!--            let userTbody =-->
-<!--                "<tr><td>" + data.id + "</td>" +-->
-<!--                "<td>" + data.firstName + "</td>" +-->
-<!--                "<td>" + data.lastname + "</td>" +-->
-<!--                "<td>" + data.age + "</td>" +-->
-<!--                "<td>" + data.email + "</td>" +-->
-<!--                "<td>" + data.roleToString + "</td></tr>";-->
-
-<!--            $("#test_user").html(userTbody);-->
-
-
-<!--        })-->
-<!--    }-->
-
-<!--    function currEmail() {-->
-<!--        $.get(`/api/auth/`, function (data) {-->
-<!--            let authUserEmail = data.email;-->
-<!--            $("#currentUserEmail").html(authUserEmail);-->
-<!--        })-->
-<!--    }-->
-
-<!--    function currRoles() {-->
-<!--        $.get(`/api/auth/`, function (data) {-->
-
-<!--            let authUserRoles = data.roleToString;-->
-<!--            $("#currentUserRoles").html(authUserRoles);-->
-<!--        })-->
-<!--    }-->
-
-
-<!--    $(document).ready(function () {-->
-<!--        showCurrUser();-->
-<!--        currEmail();-->
-<!--        currRoles();-->
-<!--    })-->
-
-<!--</script>-->
-<!--<script type="text/javascript">-->
-<!--    $(document).ready(function () {-->
-<!--        $.get(`/api/users/`, function (data) {-->
-
-<!--            console.log(data);-->
-
-<!--            let userTbody = ""-->
-
-<!--            for (i=0; i < data.length; i++) {-->
-<!--             userTbody = userTbody +  "<tr><td>" + data[i].id + "</td><td>" + data[i].firstName + "</td><td>" +data[i].lastname+-->
-<!--                "</td><td>" + data[i].age + "</td><td>" + data[i].email + "</td><td>" + data[i].roleToString + "</td></tr>";-->
-<!--            }-->
-
-<!--            $("#test_user").html(userTbody);-->
-
-
-<!--            // userTbody = userTbody + "</tr>";-->
-
-
-<!--        })-->
-
-<!--    })-->
-<!--</script>-->
-<!--ОСНОВА-->
 <div class="container-fluid ">
 
     <div style="height: calc(100vh - 60px)" class="row">
@@ -139,18 +71,9 @@
                         <th>Role</th>
                     </tr>
                     </thead>
-                    <tbody id="test_user">
+                    <tbody id="test_user1">
 
 
-                    <!--                    <tr th:object="${usera}">-->
-                    <!--                        <td th:utext="${usera.id}">ID</td>-->
-                    <!--                        <td th:utext="${usera.firstName}">First Name</td>-->
-                    <!--                        <td th:utext="${usera.lastname}">Last Name</td>-->
-                    <!--                        <td th:utext="${usera.age}">Age</td>-->
-                    <!--                        <td th:utext="${usera.email}">E-mail</td>-->
-                    <!--                        <td th:utext="${usera.roleToString()}"></td>-->
-
-                    <!--                    </tr>-->
                     </tbody>
                 </table>
             </div>
