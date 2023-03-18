@@ -5,8 +5,8 @@ const tbody = $('#test_user');
 getTableUser()
 
 function getTableUser() {
-    console.log("he1");
-    // let tbody=$('#test_user');
+
+
     tbody.empty()
 
     fetch("http://localhost:8080/api/users")
@@ -38,6 +38,6 @@ function getTableUser() {
             })
         })
 
-    console.log("he2");
+
 
 }

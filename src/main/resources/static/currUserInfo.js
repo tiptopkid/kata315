@@ -3,7 +3,7 @@
 // showCurrUser()
     function showCurrUser() {
     $.get(`/api/auth/`, function (data) {
-        console.log(data);
+
 
         let userTbody =
             "<tr><td>" + data.id + "</td>" +
