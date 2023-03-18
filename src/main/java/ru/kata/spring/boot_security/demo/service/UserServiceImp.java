@@ -27,7 +27,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImp(UserRepository userRepository,@Lazy PasswordEncoder passwordEncoder) {
+    public UserServiceImp(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -55,9 +55,10 @@ public class UserServiceImp implements UserService, UserDetailsService {
 //        User result = userRepository.getById(id);
 //        Hibernate.initialize(result.getRoles());
 //        return result;
+        return userRepository.findById(id).get();
 
 
-        return userRepository.getById(id);
+//        return userRepository.getById(id);
 
     }
 
@@ -71,7 +72,8 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
 
     }
-//TODO
+
+    //TODO
     @Override
     @Transactional
     public void updateUser(User updatedUser, int id) {
@@ -97,7 +99,6 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
         userRepository.deleteById(id);
     }
-
 
 
     @Override

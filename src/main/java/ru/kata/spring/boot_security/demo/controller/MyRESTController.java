@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.exception_handling.NoSuchUserException;
 import ru.kata.spring.boot_security.demo.exception_handling.UserIncorrectData;
@@ -27,6 +28,12 @@ public class MyRESTController {
 
     }
 
+    @GetMapping("/auth")
+    public ResponseEntity<User> getAuthUser(@AuthenticationPrincipal User user) {
+
+        return ResponseEntity.ok(user);
+    }
+
 
     @GetMapping("/users/{id}")
     public User getUser(@PathVariable int id) {
@@ -40,9 +47,10 @@ public class MyRESTController {
     }
 
     @PostMapping("/users")
-    public User addNewUser(@RequestBody User user) {
+    public String addNewUser(@RequestBody User user) {
         userService.add(user);
-        return user;
+//        return user;
+        return "redirect:/admin";
 
     }
 

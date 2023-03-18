@@ -2,8 +2,6 @@ package ru.kata.spring.boot_security.demo.models;
 
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -136,7 +133,7 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public String roleToString() {
+    public String getroleToString() {
         return roles.stream().map(Object::toString).collect(Collectors.joining(", "));
     }
 

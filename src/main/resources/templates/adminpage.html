@@ -14,6 +14,161 @@
     <title>Hello, world!</title>
 </head>
 <body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<!--<script  src="/currUserInfo.js"></script>-->
+<script type="text/javascript"></script>
+<script>
+    /*$(document).ready(function () {
+        // function addUser() {
+        //     $.ajax({
+        //         url: 'api/users',
+        //         dataType: 'json',
+        //         type: 'POST',
+        //         cache: false,
+        //         contentType: 'application/json',
+        //         data: JSON.stringify({
+        //             firstname: $("#new_name").val(),
+        //             lastname: $("#new_lastname").val(),
+        //             age: $("#new_age").val(),
+        //             email: $("#new_email").val(),
+        //             password: $("#new_password").val()
+        //         })
+        //     })
+        // }
+
+        function addUser() {
+            $.ajax({
+                url: 'api/users',
+                dataType: 'json',
+                type: 'POST',
+                cache: false,
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    firstName: $("#new_name").val(),
+                    lastname: $("#new_lastname").val(),
+                    age: $("#new_age").val(),
+                    email: $("#new_email").val(),
+                    password: $("#new_password").val(),
+
+                })
+            })
+        }
+
+
+    })
+*/
+
+// function handleFormSubmit(event) {
+//     event.preventDefault();
+//     console.log("Отправка")
+// }
+//
+// const applicationForm = document.getElementById("newUser")
+// applicationForm.addEventListener("submit", handleFormSubmit);
+
+
+    // function addUser() {
+    //     $.ajax({
+    //         url: 'api/users',
+    //         dataType: 'json',
+    //         type: 'POST',
+    //         cache: false,
+    //         contentType: 'application/json',
+    //
+    //         data: JSON.stringify({
+    //             firstName: $("#new_name").val(),
+    //             lastname: $("#new_lastname").val(),
+    //             age: $("#new_age").val(),
+    //             email: $("#new_email").val(),
+    //             password: $("#new_password").val(),
+    //             roles: ([
+    //                 {
+    //                     "id": 2,
+    //                     "name": "ROLE_USER",
+    //
+    //                 }])
+    //
+    //         }),
+    //
+    //
+    //
+    //
+    //
+    //     })
+    //
+    // }
+
+//ПРОСТО ФЕТЧ
+
+    // let form = document.forms["create"];
+    // function addNewUser() {
+    //     form.addEventListener("submit", e => {
+    //         e.preventDefault();
+    //         let roles = [];
+    //         for (let i = 0; i < form.roles.options.length; i++) {
+    //             if (form.roles.options[i].selected) roles.push({
+    //                 id: form.roles.options[i].value,
+    //                 name: form.roles.options[i].text
+    //             });
+    //         }
+    //         fetch("api/users", {
+    //             method: "POST",
+    //             headers: {'Content-Type': 'application/json'},
+    //             body: JSON.stringify({
+    //                 firstName: form.firstName.value,
+    //                 lastname: form.lastname.value,
+    //                 age: form.age.value,
+    //                 email: form.email.value,
+    //                 password: form.password.value,
+    //                 roles: roles
+    //             })
+    //         }).then(() => {
+    //             form.reset();
+    //             $("userTable").click();
+    //
+    //         })
+    //
+    //     });
+    // }
+
+
+function showUserTable() {
+    $.get(`/api/users`), function (data) {
+
+        let userTboby = '';
+        for (i=0; i< data.length ; i++) {
+            userTbody = `${userTboby}<tr>
+<td>${data.id}</td>
+<td>${data.firstName}</td>
+<td>${data.lastname}</td>
+<td>${data.age}</td>
+<td>${data.email}</td>
+<td>${data.roleToString}</td>
+<td> <button type="button" class="btn btn-info" data-toggle="modal"
+                                            onclick="$(data.id)">
+                                        Edit
+                                    </button>
+
+ </td>
+ <td>
+                                    <!-- Кнопка, которая открывает модальное окно DELETE -->
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" onclick="$(data.id)" >
+                                        Delete
+                                    </button>
+ </tr>`;
+        }
+
+        $("#allUserstable").html(userTbody);
+
+    }
+}
+
+
+
+</script>
+
+
+
 
 <!--ЗАГОЛОВОК-->
 <header>
@@ -27,12 +182,13 @@
                         <td th:utext="${usera.email}">EMAIL</td>
                     </b>
 
-                    <td th:utext="'with roles: ' + ${usera.roleToString()}">with roles:</td>
+                    <td th:utext="'with roles: ' + ${usera.getroleToString()}">with roles:</td>
                 </tr>
             </div>
             <div class="col-1">
                 <form th:action="@{/logout}" method="post">
                     <input class="btn btn-outline-secondary" type="submit" value="Logout"/>
+                </form>
             </div>
         </div>
     </div>
@@ -50,7 +206,7 @@
         <div class="col-2 py-4 px-0">
             <ul class="nav nav-pills nav-fill flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active text-left" data-toggle="tab" href="#adminPanel">Admin</a>
+                    <a class="nav-link active text-left" data-toggle="tab" id="homeTab" href="#adminPanel">Admin</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-left" data-toggle="tab" href="#userPanel">User</a>
@@ -72,7 +228,7 @@
 
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#allUsers">Users table</a>
+                    <a class="nav-link active" data-toggle="tab" id="userTable" href="#allUsers">Users table</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#newUser">New User</a>
@@ -107,7 +263,7 @@
                                 <td th:utext="${user.lastname}">Last Name</td>
                                 <td th:utext="${user.age}">Age</td>
                                 <td th:utext="${user.email}">E-mail</td>
-                                <td th:utext="${user.roleToString()}"></td>
+                                <td th:utext="${user.getroleToString()}"></td>
                                 <td>
 
 
@@ -168,15 +324,15 @@
                                                             <input class="form-control" placeholder="Password"
                                                                    type="password" name="password" id="editPassword" minlength="3">
 
-                                                            <p>
-                                                                <b><label for="roles">Roles</label></b>
-                                                                <select class="form-control" size="2" id="editRoles" name="roles" multiple th:value="*{roles}">
-                                                                    <option th:each="role : ${allRoles}"
-                                                                            th:text="${role.toString()}"
-                                                                            th:value="${role.id}"
-                                                                    ></option>
-                                                                </select>
-                                                            </p>
+<!--                                                            <p>-->
+<!--                                                                <b><label for="roles">Roles</label></b>-->
+<!--                                                                <select class="form-control" size="2" id="editRoles" name="roles" multiple th:value="*{roles}">-->
+<!--                                                                    <option th:each="role : ${allRoles}"-->
+<!--                                                                            th:text="${role.toString()}"-->
+<!--                                                                            th:value="${role.id}"-->
+<!--                                                                    ></option>-->
+<!--                                                                </select>-->
+<!--                                                            </p>-->
 
 
 
@@ -310,40 +466,45 @@
                     </div>
                     <div style="background-color: white" class="tableuser border p-4">
 
-                        <form th:method="POST" th:action="@{/admin}" th:object="${newUser}">
+                        <form id="new_user">
 
                             <div style="margin-left: auto; margin-right: auto" class="form-group col-3 text-center">
 
-                                <b><label for="name">First Name</label></b>
-                                <input class="form-control" placeholder="First name" type="text" th:field="*{firstName}"
-                                       id="name">
+                                <b><label for="new_name">First Name</label></b>
+                                <input class="form-control" placeholder="First name" type="text"
+                                       id="new_name">
                                 <br/>
-                                <b><label for="lastname">Last Name</label></b>
-                                <input class="form-control" placeholder="Last name" type="text" th:field="*{lastname}"
-                                       id="lastname">
+                                <b><label for="new_lastname">Last Name</label></b>
+                                <input class="form-control" placeholder="Last name" type="text"
+                                       id="new_lastname">
                                 <br/>
-                                <b> <label for="age">Age</label></b>
-                                <input class="form-control" placeholder="Age" type="text" th:field="*{age}" id="age">
+                                <b> <label for="new_age">Age</label></b>
+                                <input class="form-control" placeholder="Age" type="text"  id="new_age">
                                 <br/>
-                                <b> <label for="email">Email</label></b>
-                                <input class="form-control" placeholder="Email" type="email" th:field="*{email}"
-                                       id="email">
+                                <b> <label for="new_email">Email</label></b>
+                                <input class="form-control" placeholder="Email" type="email"
+                                       id="new_email">
                                 <br/>
-                                <b> <label for="password">Password</label></b>
+                                <b> <label for="new_password">Password</label></b>
                                 <input class="form-control" placeholder="Password" type="password"
-                                       th:field="*{password}" id="password">
+                                        id="new_password">
                                 <br/>
+<!--                                <br/>-->
+<!--                                <b> <label for="new_role">Password</label></b>-->
+<!--                                <input class="form-control" placeholder="role" type="text"-->
+<!--                                       id="new_role">-->
+<!--                                <br/>-->
 
-                                <p>
-                                    <b><label for="roles">Roles</label></b>
-                                    <select class="form-control" size="2" id="roles" name="roles" multiple th:field="*{roles}">
-                                        <option th:each="role : ${allRoles}"
-                                                th:text="${role.toString()}"
-                                                th:value="${role.id}"
-                                        ></option>
-                                    </select>
-                                </p>
-                                <input class="btn btn-success btn-lg" type="submit" value="Add new user"/>
+<!--                                <p>-->
+<!--                                    <b><label for="roles">Roles</label></b>-->
+<!--                                    <select class="form-control" size="2" id="roles" name="roles" multiple th:field="*{roles}">-->
+<!--                                        <option th:each="role : ${allRoles}"-->
+<!--                                                th:text="${role.toString()}"-->
+<!--                                                th:value="${role.id}"-->
+<!--                                        ></option>-->
+<!--                                    </select>-->
+<!--                                </p>-->
+                                <input class="btn btn-success btn-lg" type="submit" onclick="addUser()" value="Add new user"/>
                             </div>
 
                         </form>
@@ -384,7 +545,7 @@
                                     <td th:utext="${usera.lastname}">Last Name</td>
                                     <td th:utext="${usera.age}">Age</td>
                                     <td th:utext="${usera.email}">E-mail</td>
-                                    <td th:utext="${usera.roleToString()}"></td>
+                                    <td th:utext="${usera.getroleToString()}"></td>
 
 
 
