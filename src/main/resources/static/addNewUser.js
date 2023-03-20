@@ -1,14 +1,13 @@
 'use strict';
 
 
-
 let form = document.forms["create"];
 createNewUser()
 
 function createNewUser() {
     form.addEventListener("submit", ev => {
         ev.preventDefault();
-        let roles= [];
+        let roles = [];
         for (let i = 0; i < form.roles.options.length; i++) {
             if (form.roles.options[i].selected) roles.push({
                 id: form.roles.options[i].value,

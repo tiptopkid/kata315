@@ -1,7 +1,7 @@
 "use strict";
-    //все юзеры
+//все юзеры
 // showCurrUser()
-    function showCurrUser() {
+function showCurrUser() {
     $.get(`/api/auth/`, function (data) {
 
 
@@ -19,14 +19,14 @@
     })
 }
 
-    function currEmail() {
+function currEmail() {
     $.get(`/api/auth/`, function (data) {
         let authUserEmail = data.email;
         $("#currentUserEmail").html(authUserEmail);
     })
 }
 
-    function currRoles() {
+function currRoles() {
     $.get(`/api/auth/`, function (data) {
 
         let authUserRoles = data.roleToString;
@@ -35,7 +35,7 @@
 }
 
 
-    $(document).ready(function () {
+$(document).ready(function () {
 
 
     showCurrUser();

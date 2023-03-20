@@ -1,16 +1,11 @@
 package ru.kata.spring.boot_security.demo.models;
 
-
-
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
-
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import java.util.Collection;
-
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,9 +32,7 @@ public class User implements UserDetails {
 
 
     private String password;
-//    @JsonIgnoreProperties(ignoreUnknown=true)
-//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-//@JsonManagedReference
+
     @Fetch(FetchMode.JOIN)
     @ManyToMany
     @JoinTable(name = "users_roles",
@@ -51,14 +44,7 @@ public class User implements UserDetails {
     public User() {
     }
 
-//    public User(String firstName, String lastname, int age, String email, String password) {
-//        this.firstName = firstName;
-//        this.lastname = lastname;
-//        this.age = age;
-//        this.email = email;
-//        this.password = password;
-//
-//    }
+
 
     public User(String firstName, String lastname, int age, String email, String password, Set<Role> roles) {
         this.firstName = firstName;
@@ -152,10 +138,6 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
-
-//        return roles.stream()
-//                .map(r -> new SimpleGrantedAuthority(r.getName()))
-//                .collect(Collectors.toList());
     }
 
     @Override
